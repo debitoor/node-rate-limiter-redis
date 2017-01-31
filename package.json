@@ -1,0 +1,22 @@
+{
+  "name": "node-rate-limiter-redis",
+  "version": "0.0.1",
+  "description": "Radis Adaptor for Rate limiter for Node.js",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [
+    "limit",
+    "limiter",
+    "ratelimit",
+    "rate",
+    "radis"
+  ],
+  "author": "mujichOk",
+  "license": "MIT",
+  "dependencies": {
+    "redis": "2.6.5"
+  },
+  "devDependencies": {
+    "mocha": "3.2.0"
+  }
+}
