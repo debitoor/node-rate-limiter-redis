@@ -44,8 +44,7 @@ function reset(adaptorOpts, id, callback) {
 
     function onDone(err, res) {
         if (timerId) {
-            clearTimeout(timerId);
-            timerId = null;
+            timerId = clearTimeout(timerId);
         }
 
         callback(err, res);
@@ -64,8 +63,7 @@ function get(adaptorOpts, id, opts, callback) {
 
     function onEvalshaDone(err, res) {
         if (timerId) {
-            clearTimeout(timerId);
-            timerId = null;
+            timerId = clearTimeout(timerId);
         }
 
         if (err) {
