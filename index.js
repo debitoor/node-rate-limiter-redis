@@ -1,4 +1,4 @@
-const package = require('package.json');
+const package = require('./package.json');
 
 const redis = require('redis');
 const path = require('path');
@@ -23,7 +23,7 @@ RedisAdaptor.ver = package.version;
 function RedisAdaptor(opts) {
     opts = opts || {};
     opts.timeout = opts.timeout || defaultTimeout;
-    opts.database = opts.database || redis.createClient();
+    opts.client = opts.client || redis.createClient();
 
     const adaptorOpts = opts;
 
@@ -39,7 +39,7 @@ function reset(adaptorOpts, id, callback) {
 
     const onExecDoneOnce = once(callback);
 
-    adaptorOpts.database
+    adaptorOpts.client
         .multi()
         .del(keyClientTotal)
         .del(keyClientLimit)
@@ -55,7 +55,7 @@ function get(adaptorOpts, id, opts, callback) {
     
     const onEvalshaDoneOnce = once(onEvalshaDone);
 
-    adaptorOpts.database.evalsha(adaptorOpts.scriptSha, 3, id, limit, expire, onEvalshaDoneOnce);
+    adaptorOpts.client.evalsha(adaptorOpts.scriptSha, 3, id, limit, expire, onEvalshaDoneOnce);
     setTimeout(() => onEvalshaDoneOnce(new NodeRateLimiter.TimeoutError()), adaptorOpts.timeout);
 
 
@@ -79,7 +79,7 @@ function prepare(adaptorOpts, callback) {
 
     const onScriptLoadedOnce = once(onScriptLoaded);
 
-    adaptorOpts.database.script('load', script, onScriptLoadedOnce);
+    adaptorOpts.client.script('load', script, onScriptLoadedOnce);
     setTimeout(() => onScriptLoadedOnce(new nodeRateLimiter.TimeoutError()), adaptorOpts.timeout);
 
 
