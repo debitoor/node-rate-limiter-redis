@@ -1,3 +1,6 @@
+const NoteRateLimiter = require('node-rate-limiter');
+
+const package = require('package.json');
 const redis = require('redis');
 const path = require('path');
 const fs = require('fs');
@@ -8,6 +11,8 @@ const defaultExpiration = 1000 * 60 * 60;
 const script = fs.readFileSync(path.join(__dirname, 'script.lua'), 'utf-8');
 let scriptSha;
 
+NoteRateLimiter.register({name: 'redis', adaptor: RedisAdaptor, ver: package.version});
+
 module.exports = RedisAdaptor;
 
 
@@ -16,6 +21,7 @@ function RedisAdaptor(database) {
     this.reset = (id, callback) => reset(database, id, callback); 
     this.get = (id, opts, callback) => get(database, id, opts, callback);
 }
+
 
 function reset(db, id, callback) {
     const keyClient = 'ratelimiter.' + id;
@@ -52,10 +58,10 @@ function prepare(database, callback) {
         return callback(null);
     }
 
-    database.script('load', script, onScriptLoad);
+    database.script('load', script, onScriptLoaded);
 
 
-    function onScriptLoad(err, sha) {
+    function onScriptLoaded(err, sha) {
         if (err) {
             return callback(err);
         }
