@@ -1,4 +1,4 @@
-const package = require('./package.json');
+const pkg = require('./package.json');
 
 const redis = require('redis');
 const path = require('path');
@@ -7,22 +7,16 @@ const once = require('once');
 
 const NodeRateLimiter = require('node-rate-limiter');
 
-
-const defaultRateLimit = 5000;
-const defaultExpiration = 1000 * 60 * 60;
-const defaultTimeout = 500;
-
 const script = fs.readFileSync(path.join(__dirname, 'script.lua'), 'utf-8');
 
 module.exports = RedisAdaptor;
 
-
 RedisAdaptor.name = 'redis';
-RedisAdaptor.ver = package.version;
+RedisAdaptor.ver = pkg.version;
 
 function RedisAdaptor(opts) {
     opts = opts || {};
-    opts.timeout = opts.timeout || defaultTimeout;
+    opts.timeout = opts.timeout || NodeRateLimiter.defaultTimeout;
     opts.client = opts.client || redis.createClient();
 
     const adaptorOpts = opts;
@@ -37,7 +31,7 @@ function reset(adaptorOpts, id, callback) {
     const keyClientTotal = keyClient + '.total';
     const keyClientLimit = keyClient + '.limit';
 
-    const onExecDoneOnce = once(callback);
+    const onDoneOnce = once(onDone);
 
     adaptorOpts.client
         .multi()
@@ -45,23 +39,39 @@ function reset(adaptorOpts, id, callback) {
         .del(keyClientLimit)
         .exec(onExecDoneOnce);
 
-    setTimeout(() => onExecDoneOnce(new NodeRateLimiter.TimeoutError()), adaptorOpts.timeout);
+    let timerId = registerTimeout(adaptorOpts.timeout, onExecDoneOnce);
+
+
+    function onDone(err, res) {
+        if (timerId) {
+            clearTimeout(timerId);
+            timerId = null;
+        }
+
+        callback(err, res);
+    }
 }
 
 function get(adaptorOpts, id, opts, callback) {
-    const limit = opts && opts.limit || defaultRateLimit;
-    const expire = opts && opts.expire || defaultExpiration;
+    const limit = opts && opts.limit || NodeRateLimiter.defaultRateLimit;
+    const expire = opts && opts.expire || NodeRateLimiter.defaultExpiration;
     
     const onEvalshaDoneOnce = once(onEvalshaDone);
 
     adaptorOpts.client.evalsha(adaptorOpts.scriptSha, 3, id, limit, expire, onEvalshaDoneOnce);
-    setTimeout(() => onEvalshaDoneOnce(new NodeRateLimiter.TimeoutError()), adaptorOpts.timeout);
+    let timerId = registerTimeout(adaptorOpts.timeout, onEvalshaDoneOnce);
 
 
     function onEvalshaDone(err, res) {
+        if (timerId) {
+            clearTimeout(timerId);
+            timerId = null;
+        }
+
         if (err) {
             return callback(err);
         }
+
         const result = {
             limit: res[0], 
             remaining: res[0] - res[1] + 1, 
@@ -79,10 +89,15 @@ function prepare(adaptorOpts, callback) {
     const onScriptLoadedOnce = once(onScriptLoaded);
 
     adaptorOpts.client.script('load', script, onScriptLoadedOnce);
-    setTimeout(() => onScriptLoadedOnce(new NodeRateLimiter.TimeoutError()), adaptorOpts.timeout);
+    let timerId = registerTimeout(adaptorOpts.timeout, onScriptLoadedOnce);
 
 
     function onScriptLoaded(err, sha) {
+        if (timerId) {
+            clearTimeout(timerId);
+            timerId = null;
+        }
+
         if (err) {
             return callback(err);
         }
@@ -90,4 +105,11 @@ function prepare(adaptorOpts, callback) {
         adaptorOpts.scriptSha = sha;
         callback(null);
     }
+}
+
+function registerTimeout(timeout, callback) {
+    return setTimeout(() => {
+        const error = new NodeRateLimiter.TimeoutError(null, {after: adaptorOpts.timeout});
+        callback(error);
+    }, timeout);
 }
