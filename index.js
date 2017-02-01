@@ -109,7 +109,7 @@ function prepare(adaptorOpts, callback) {
 
 function registerTimeout(timeout, callback) {
     return setTimeout(() => {
-        const error = new NodeRateLimiter.TimeoutError(null, {after: adaptorOpts.timeout});
+        const error = new NodeRateLimiter.TimeoutError(null, {after: timeout});
         callback(error);
     }, timeout);
 }
