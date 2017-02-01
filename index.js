@@ -43,7 +43,6 @@ function reset(adaptorOpts, id, callback) {
         .multi()
         .del(keyClientTotal)
         .del(keyClientLimit)
-        .del(keyClientExpire)
         .exec(onExecDoneOnce);
 
     setTimeout(() => onExecDoneOnce(new NodeRateLimiter.TimeoutError()), adaptorOpts.timeout);
