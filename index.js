@@ -39,7 +39,7 @@ function reset(adaptorOpts, id, callback) {
         .del(keyClientLimit)
         .exec(onDoneOnce);
 
-    let timerId = registerTimeout(adaptorOpts.timeout, onDoneOnce);
+    let timerId = registerTimeout(`reset(${id})`, adaptorOpts.timeout, onDoneOnce);
 
 
     function onDone(err, res) {
@@ -59,7 +59,7 @@ function get(adaptorOpts, id, opts, callback) {
     const onEvalshaDoneOnce = once(onEvalshaDone);
 
     adaptorOpts.client.evalsha(adaptorOpts.scriptSha, 3, id, limit, expire, onEvalshaDoneOnce);
-    let timerId = registerTimeout(adaptorOpts.timeout, onEvalshaDoneOnce);
+    let timerId = registerTimeout(`get(${id}, ${opts})`, adaptorOpts.timeout, onEvalshaDoneOnce);
 
 
     function onEvalshaDone(err, res) {
@@ -99,9 +99,9 @@ function prepare(adaptorOpts, callback) {
     }
 }
 
-function registerTimeout(timeout, callback) {
+function registerTimeout(message, timeout, callback) {
     return setTimeout(() => {
-        const error = new NodeRateLimiter.TimeoutError(null, {after: timeout});
+        const error = new NodeRateLimiter.TimeoutError(message, {after: timeout});
         callback(error);
     }, timeout);
 }
