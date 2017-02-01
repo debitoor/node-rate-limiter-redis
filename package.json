@@ -1,7 +1,7 @@
 {
   "name": "node-rate-limiter-redis",
   "version": "0.1.0",
-  "description": "Radis Adaptor for Rate limiter for Node.js",
+  "description": "Radis Adaptor for Rate limiter",
   "main": "index.js",
   "scripts": {},
   "keywords": [
