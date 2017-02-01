@@ -5,7 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const once = require('once');
 
-const noteRateLimiter = require('node-rate-limiter');
+const NodeRateLimiter = require('node-rate-limiter');
 
 
 const defaultRateLimit = 5000;
@@ -13,16 +13,17 @@ const defaultExpiration = 1000 * 60 * 60;
 const defaultTimeout = 500;
 
 const script = fs.readFileSync(path.join(__dirname, 'script.lua'), 'utf-8');
-let scriptSha;
-
-noteRateLimiter.registerAdaptor({name: 'redis', adaptor: RedisAdaptor, ver: package.version});
 
 module.exports = RedisAdaptor;
 
 
+RedisAdaptor.name = 'redis';
+RedisAdaptor.ver = package.version;
+
 function RedisAdaptor(opts) {
     opts = opts || {};
     opts.timeout = opts.timeout || defaultTimeout;
+    opts.database = opts.database || redis.createClient();
 
     const adaptorOpts = opts;
 
@@ -30,7 +31,6 @@ function RedisAdaptor(opts) {
     this.reset = (id, callback) => reset(adaptorOpts, id, callback); 
     this.get = (id, opts, callback) => get(adaptorOpts, id, opts, callback);
 }
-
 
 function reset(adaptorOpts, id, callback) {
     const keyClient = 'ratelimiter.' + id;
@@ -46,17 +46,17 @@ function reset(adaptorOpts, id, callback) {
         .del(keyClientExpire)
         .exec(onExecDoneOnce);
 
-    setTimeout(() => onExecDoneOnce(new nodeRateLimiter.TimeoutError()), adaptorOpts.timeout);
+    setTimeout(() => onExecDoneOnce(new NodeRateLimiter.TimeoutError()), adaptorOpts.timeout);
 }
 
 function get(adaptorOpts, id, opts, callback) {
     const limit = opts && opts.limit || defaultRateLimit;
     const expire = opts && opts.expire || defaultExpiration;
-
+    
     const onEvalshaDoneOnce = once(onEvalshaDone);
 
-    adaptorOpts.database.evalsha(scriptSha, 3, id, limit, expire, onEvalshaDoneOnce);
-    setTimeout(() => onEvalshaDoneOnce(new nodeRateLimiter.TimeoutError()), adaptorOpts.timeout);
+    adaptorOpts.database.evalsha(adaptorOpts.scriptSha, 3, id, limit, expire, onEvalshaDoneOnce);
+    setTimeout(() => onEvalshaDoneOnce(new NodeRateLimiter.TimeoutError()), adaptorOpts.timeout);
 
 
     function onEvalshaDone(err, res) {
@@ -73,7 +73,7 @@ function get(adaptorOpts, id, opts, callback) {
 }
 
 function prepare(adaptorOpts, callback) {
-    if (scriptSha) {
+    if (adaptorOpts.scriptSha) {
         return callback(null);
     }
 
@@ -88,7 +88,7 @@ function prepare(adaptorOpts, callback) {
             return callback(err);
         }
 
-        scriptSha = sha;
+        adaptorOpts.scriptSha = sha;
         callback(null);
     }
 }
