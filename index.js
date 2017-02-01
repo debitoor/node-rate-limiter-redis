@@ -27,7 +27,7 @@ function RedisAdaptor(opts) {
 }
 
 function reset(adaptorOpts, id, callback) {
-    const keyClient = 'ratelimiter.' + id;
+    const keyClient = 'noderatelimiter.' + id;
     const keyClientTotal = keyClient + '.total';
     const keyClientLimit = keyClient + '.limit';
 
@@ -55,6 +55,8 @@ function get(adaptorOpts, id, opts, callback) {
     const limit = opts && opts.limit || NodeRateLimiter.defaultRateLimit;
     const expire = opts && opts.expire || NodeRateLimiter.defaultExpiration;
     
+    console.log(expire);
+
     const onEvalshaDoneOnce = once(onEvalshaDone);
 
     adaptorOpts.client.evalsha(adaptorOpts.scriptSha, 3, id, limit, expire, onEvalshaDoneOnce);
@@ -73,7 +75,9 @@ function get(adaptorOpts, id, opts, callback) {
         const result = {
             limit: res[0], 
             remaining: res[0] - res[1] + 1, 
-            reset: res[2]
+            reset: res[2], 
+
+            res: res
         };
         callback(null, result);
     }
