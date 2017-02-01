@@ -59,7 +59,7 @@ function get(adaptorOpts, id, opts, callback) {
     const onEvalshaDoneOnce = once(onEvalshaDone);
 
     adaptorOpts.client.evalsha(adaptorOpts.scriptSha, 3, id, limit, expire, onEvalshaDoneOnce);
-    let timerId = registerTimeout(`get(${id}, ${opts})`, adaptorOpts.timeout, onEvalshaDoneOnce);
+    let timerId = registerTimeout(`get(${id}, ${JSON.stringify(opts)})`, adaptorOpts.timeout, onEvalshaDoneOnce);
 
 
     function onEvalshaDone(err, res) {
