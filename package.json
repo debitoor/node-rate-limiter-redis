@@ -14,7 +14,8 @@
   "author": "mujichOk",
   "license": "MIT",
   "dependencies": {
-    "node-rate-limiter": "git+https://github.com/mujichOk/node-rate-limiter.git"
+    "node-rate-limiter": "git+https://github.com/mujichOk/node-rate-limiter.git",
+    "once": "^1.4.0"
   },
   "devDependencies": {
     "mocha": "3.2.0"
