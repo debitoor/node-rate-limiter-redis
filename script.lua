@@ -3,9 +3,9 @@ local limitKey = "noderatelimiter." .. KEYS[1] .. ".limit"
 
 redis.call("setnx", limitKey, KEYS[2])
 local setnx = redis.call("setnx", totalKey, 0)
+local pttl = redis.call("pttl", totalKey)
 local total = redis.call("incr", totalKey)
 local limit = tonumber(redis.call("get", limitKey))
-local pttl = redis.call("pttl", totalKey)
 
 if total > limit then 
     total = limit
