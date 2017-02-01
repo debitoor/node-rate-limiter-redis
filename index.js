@@ -79,7 +79,7 @@ function prepare(adaptorOpts, callback) {
     const onScriptLoadedOnce = once(onScriptLoaded);
 
     adaptorOpts.client.script('load', script, onScriptLoadedOnce);
-    setTimeout(() => onScriptLoadedOnce(new nodeRateLimiter.TimeoutError()), adaptorOpts.timeout);
+    setTimeout(() => onScriptLoadedOnce(new NodeRateLimiter.TimeoutError()), adaptorOpts.timeout);
 
 
     function onScriptLoaded(err, sha) {
