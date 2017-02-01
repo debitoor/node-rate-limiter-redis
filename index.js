@@ -86,18 +86,10 @@ function prepare(adaptorOpts, callback) {
         return callback(null);
     }
 
-    const onScriptLoadedOnce = once(onScriptLoaded);
-
-    adaptorOpts.client.script('load', script, onScriptLoadedOnce);
-    let timerId = registerTimeout(adaptorOpts.timeout, onScriptLoadedOnce);
+    adaptorOpts.client.script('load', script, onScriptLoaded);
 
 
     function onScriptLoaded(err, sha) {
-        if (timerId) {
-            clearTimeout(timerId);
-            timerId = null;
-        }
-
         if (err) {
             return callback(err);
         }
