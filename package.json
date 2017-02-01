@@ -12,9 +12,14 @@
     "radis"
   ],
   "author": "mujichOk",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mujichOk/node-rate-limiter-redis.git"
+  },
   "license": "MIT",
   "dependencies": {
     "node-rate-limiter": "git+https://github.com/mujichOk/node-rate-limiter.git",
-    "once": "^1.4.0"
+    "once": "^1.4.0",
+    "redis": "2.6.5"
   }
 }
