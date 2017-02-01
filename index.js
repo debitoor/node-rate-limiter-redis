@@ -37,9 +37,9 @@ function reset(adaptorOpts, id, callback) {
         .multi()
         .del(keyClientTotal)
         .del(keyClientLimit)
-        .exec(onExecDoneOnce);
+        .exec(onDoneOnce);
 
-    let timerId = registerTimeout(adaptorOpts.timeout, onExecDoneOnce);
+    let timerId = registerTimeout(adaptorOpts.timeout, onDoneOnce);
 
 
     function onDone(err, res) {
