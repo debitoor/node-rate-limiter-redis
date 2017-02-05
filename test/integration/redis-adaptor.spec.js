@@ -24,7 +24,7 @@ describe('RedisAdaptor', () => {
 
 	describe('get(id, opts, callback)', () => {
 		const adaptor = new RedisAdaptor({timeout: 10000});
-		const opts = { limit: 10, expire: 10000 };
+		const opts = { limit: 10, expire: 2000 };
 		let refresh = opts.expire;
 
 		before((done) =>
@@ -37,8 +37,6 @@ describe('RedisAdaptor', () => {
 		[10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 0].forEach((v, i) => {
 			it('should return valid limit\'s info on call #' + (i + 1), (done) => {
 				adaptor.get(id, opts, (err, limit) => {
-					console.log(JSON.stringify(err), JSON.stringify(limit));
-
 					expect(limit).to.be.ok;
 					expect(limit).to.have.property('limit', 10);
 					expect(limit).to.have.property('remaining', v);
@@ -51,7 +49,7 @@ describe('RedisAdaptor', () => {
 			});
 		});
 
-		it.skip('should return limit\'s info with reseted remaining attempts on call afte expire', function (done) {
+		it('should return limit\'s info with reseted remaining attempts on call afte expire', function (done) {
 			this.timeout(opts.expire * 2);
 
 			setTimeout(() => {

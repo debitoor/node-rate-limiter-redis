@@ -74,7 +74,7 @@ function get(adaptorOpts, id, opts, callback) {
 		const result = {
 			limit: res[0],
 			remaining: res[0] - res[1] + 1,
-			refresh: res[2]
+			refresh: parseInt(res[2])
 		};
 		callback(null, result);
 	}
