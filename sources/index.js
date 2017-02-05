@@ -5,7 +5,7 @@ const once = require('once');
 
 const NodeRateLimiter = require('node-rate-limiter');
 
-const script = fs.readFileSync(path.join(__dirname, 'sources/script.lua'), 'utf-8');
+const script = fs.readFileSync(path.join(__dirname, 'script.lua'), 'utf-8');
 
 module.exports = RedisAdaptor;
 
