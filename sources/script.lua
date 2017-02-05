@@ -11,7 +11,7 @@ if total > limit then
     total = limit
 end
 
-if setnx == 1 or pttl == -1 then
+if setnx == 1 or pttl < 0 then
     redis.call("pexpire", totalKey, KEYS[3])
     redis.call("pexpire", limitKey, KEYS[3])
     pttl = KEYS[3]
