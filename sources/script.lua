@@ -8,7 +8,7 @@ local total = redis.call("incr", totalKey)
 local limit = tonumber(redis.call("get", limitKey))
 
 if total > limit then 
-    total = limit
+    total = limit + 1
 end
 
 if setnx == 1 or pttl < 0 then
