@@ -1,5 +1,3 @@
-const pkg = require('./package.json');
-
 const redis = require('redis');
 const path = require('path');
 const fs = require('fs');
