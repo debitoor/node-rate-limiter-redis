@@ -1,3 +1,4 @@
+const assert = require('assert');
 const redis = require('redis');
 const path = require('path');
 const fs = require('fs');
@@ -11,7 +12,7 @@ module.exports = RedisAdaptor;
 
 
 function RedisAdaptor(opts) {
-	assert(this instanceof InMemoryAdaptor, 'RedisAdaptor should be created with new keyword: new RedisAdaptor(...)');
+	assert(this instanceof RedisAdaptor, 'RedisAdaptor should be created with new keyword: new RedisAdaptor(...)');
 
     opts = opts || {};
     opts.timeout = opts.timeout || NodeRateLimiter.defaultTimeout;
