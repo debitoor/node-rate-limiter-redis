@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "description": "Radis Adaptor for Node rate limiter",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "mocha"
+  },
   "keywords": [
     "limit",
     "limiter",
