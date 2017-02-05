@@ -1,4 +1,4 @@
-# node-rate-limiter-redis
+# node-rate-limiter-redis [![Build Status](https://travis-ci.org/mujichOk/node-rate-limiter-redis.svg?branch=master)](https://travis-ci.org/mujichOk/node-rate-limiter-redis)
 
 Redis adaptor for [node-rate-limiter](https://github.com/mujichOk/node-rate-limiter)
 
