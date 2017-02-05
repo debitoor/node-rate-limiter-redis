@@ -3,7 +3,6 @@
 Redis adaptor for [node-rate-limiter](https://github.com/mujichOk/node-rate-limiter)
 
 # Usage
-
 ```js
     const NodeRateLimiter = require('node-rate-limiter');
 
@@ -13,6 +12,7 @@ Redis adaptor for [node-rate-limiter](https://github.com/mujichOk/node-rate-limi
     });
     const nodeRateLimiter = new NodeRateLimiter(adaptor);
 ```
+P.S. please, read [node-rate-limiter](https://github.com/mujichOk/node-rate-limiter) README file for complete usage guide 
 
 # License
 
