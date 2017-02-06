@@ -4,7 +4,7 @@ Redis adaptor for [node-rate-limiter](https://github.com/mujichOk/node-rate-limi
 
 # Requirements
 
-Redis 2.6.0+ (lua script support)
+Redis 2.6.0+ (lua script, pexpire, pttl support)
 
 # Usage
 ```js
