@@ -25,7 +25,7 @@ let requestsAmount = 50000;
 if (process.argv.length >= 4) {
 	requestsTimeframe = parseInt(process.argv[3]);
 
-	if (Number.isNaN(requestsTimeframe) || requestsTimeframe < 1000) {
+	if (Number.isNaN(requestsTimeframe) || requestsTimeframe < 500) {
 		printUsage();
 		process.exit(1);
 	}
@@ -33,7 +33,7 @@ if (process.argv.length >= 4) {
 if (process.argv.length >= 5) {
 	requestsAmount = parseInt(process.argv[4]);
 
-	if (Number.isNaN(requestsAmount) || requestsAmount < 1000) {
+	if (Number.isNaN(requestsAmount) || requestsAmount < 2) {
 		printUsage();
 		process.exit(1);
 	}
@@ -104,10 +104,10 @@ function printUsage() {
 	console.log('       - NodeRateLimiter');
 	console.log('');
 	console.log('  interval:');
-	console.log('       - represents timeframe of all requests in milliseconds (1000..)');
+	console.log('       - represents timeframe of all requests in milliseconds (500..)');
 	console.log('');
 	console.log('  requests:');
-	console.log('       - represents number of requests that suppose to be done in current timeframe (1000..)');
+	console.log('       - represents number of requests that suppose to be done in current timeframe (2..)');
 	console.log('');
 	console.log('');
 }
