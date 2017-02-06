@@ -1,5 +1,4 @@
-//const redis = require('redis');
-const RedisAdaptor = require('../../sources/redis-adaptor');
+const RedisAdaptor = require('../../source/redis-adaptor');
 
 describe('RedisAdaptor', () => {
 	const id = 'client.1';
