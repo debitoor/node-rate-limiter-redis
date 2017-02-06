@@ -14,16 +14,17 @@ if NOT %errorlevel% == 0 (
     type .output
     echo.
     del .output
+    pause
     exit errorlevel
 )
 del .output
 
 echo low load (1k requests in 2s)
-start /b cmd /c "node ../benchmark/index %1 2000 200 && echo 'done' >> 1.benchmark-lock"
-start /b cmd /c "node ../benchmark/index %1 2000 200 && echo 'done' >> 2.benchmark-lock"
-start /b cmd /c "node ../benchmark/index %1 2000 200 && echo 'done' >> 3.benchmark-lock"
-start /b cmd /c "node ../benchmark/index %1 2000 200 && echo 'done' >> 4.benchmark-lock"
-start /b cmd /c "node ../benchmark/index %1 2000 200 && echo 'done' >> 5.benchmark-lock"
+start /b cmd /c "node ../benchmark/index %1 2000 200 && type nul > 1.benchmark-lock"
+start /b cmd /c "node ../benchmark/index %1 2000 200 && type nul > 2.benchmark-lock"
+start /b cmd /c "node ../benchmark/index %1 2000 200 && type nul > 3.benchmark-lock"
+start /b cmd /c "node ../benchmark/index %1 2000 200 && type nul > 4.benchmark-lock"
+start /b cmd /c "node ../benchmark/index %1 2000 200 && type nul > 5.benchmark-lock"
 :loop1
 set cnt=0
 for %%A in (*.benchmark-lock) do set /a cnt+=1
@@ -34,11 +35,11 @@ del *.benchmark-lock
 
 
 echo normal load (10k requests in 2s)
-start /b cmd /c "node ../benchmark/index %1 2000 2000 && echo 'done' >> 1.benchmark-lock"
-start /b cmd /c "node ../benchmark/index %1 2000 2000 && echo 'done' >> 2.benchmark-lock"
-start /b cmd /c "node ../benchmark/index %1 2000 2000 && echo 'done' >> 3.benchmark-lock"
-start /b cmd /c "node ../benchmark/index %1 2000 2000 && echo 'done' >> 4.benchmark-lock"
-start /b cmd /c "node ../benchmark/index %1 2000 2000 && echo 'done' >> 5.benchmark-lock"
+start /b cmd /c "node ../benchmark/index %1 2000 2000 && type nul > 1.benchmark-lock"
+start /b cmd /c "node ../benchmark/index %1 2000 2000 && type nul > 2.benchmark-lock"
+start /b cmd /c "node ../benchmark/index %1 2000 2000 && type nul > 3.benchmark-lock"
+start /b cmd /c "node ../benchmark/index %1 2000 2000 && type nul > 4.benchmark-lock"
+start /b cmd /c "node ../benchmark/index %1 2000 2000 && type nul > 5.benchmark-lock"
 :loop2
 set cnt=0
 for %%A in (*.benchmark-lock) do set /a cnt+=1
@@ -49,11 +50,11 @@ del *.benchmark-lock
 
 
 echo high load (20k requests in 2s)
-start /b cmd /c "node ../benchmark/index %1 2000 4000 && echo 'done' >> 1.benchmark-lock"
-start /b cmd /c "node ../benchmark/index %1 2000 4000 && echo 'done' >> 2.benchmark-lock"
-start /b cmd /c "node ../benchmark/index %1 2000 4000 && echo 'done' >> 3.benchmark-lock"
-start /b cmd /c "node ../benchmark/index %1 2000 4000 && echo 'done' >> 4.benchmark-lock"
-start /b cmd /c "node ../benchmark/index %1 2000 4000 && echo 'done' >> 5.benchmark-lock"
+start /b cmd /c "node ../benchmark/index %1 2000 4000 && type nul > 1.benchmark-lock"
+start /b cmd /c "node ../benchmark/index %1 2000 4000 && type nul > 2.benchmark-lock"
+start /b cmd /c "node ../benchmark/index %1 2000 4000 && type nul > 3.benchmark-lock"
+start /b cmd /c "node ../benchmark/index %1 2000 4000 && type nul > 4.benchmark-lock"
+start /b cmd /c "node ../benchmark/index %1 2000 4000 && type nul > 5.benchmark-lock"
 :loop3
 set cnt=0
 for %%A in (*.benchmark-lock) do set /a cnt+=1
@@ -62,4 +63,5 @@ goto loop3
 :next3
 del *.benchmark-lock
 
+pause
 @echo on
