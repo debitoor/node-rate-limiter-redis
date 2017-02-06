@@ -3,9 +3,20 @@
 cd %~dp0
 
 if exist *.benchmark-lock del *.benchmark-lock
+if exist .output del .output
 
-node ../benchmark/index %1 --validate
-if NOT %errorlevel% == 0 exit errorlevel
+node ../benchmark/index %1 --validate-method >> .output
+if NOT %errorlevel% == 0 (
+    echo.
+    echo usage:
+    echo        benchmark.cmd method
+    echo.
+    type .output
+    echo.
+    del .output
+    exit errorlevel
+)
+del .output
 
 echo low load (1k requests in 2s)
 start /b cmd /c "node ../benchmark/index %1 2000 200 && echo 'done' >> 1.benchmark-lock"

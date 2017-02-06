@@ -14,13 +14,13 @@ const methodsMap = {
 };
 
 
-let isValidateArgs = false;
+let isValidateMethod = false;
 
 let args = process.argv.reduce((memo, v) => {
 	switch (v) {
-	case '--validate':
-	case '-v':
-		isValidateArgs = true;
+	case '--validate-method':
+	case '-vm':
+		isValidateMethod = true;
 		break;
 	default:
 		memo.push(v);
@@ -35,6 +35,11 @@ if (args.length < 3 || !methodsMap[args[2]]) {
 	printUsage();
 	process.exit(1);
 }
+
+if (isValidateMethod) {
+	process.exit(0);
+}
+
 
 let getRateLimitMathod = methodsMap[args[2]];
 let requestsTimeframe = 20000;
@@ -57,9 +62,6 @@ if (args.length >= 5) {
 	}
 }
 
-if (isValidateArgs) {
-	process.exit(0);
-}
 
 
 client.on('error', function (err) {
@@ -116,14 +118,19 @@ function run(getRateLimitMathod, callback) {
 }
 
 function printUsage() {
+	if (isValidateMethod) {
+		console.log('  method:');
+		Object.keys(methodsMap).forEach((k) => console.log('       - ' + k));
+		return;
+	}
+
 	console.log('');
 	console.log('usage:');
 	console.log('       node index.js method [interval] [requests]');
 	console.log('');
 	console.log('params:');
 	console.log('  method:');
-	console.log('       - RateLimiter');
-	console.log('       - NodeRateLimiter');
+	Object.keys(methodsMap).forEach((k) => console.log('       - ' + k));
 	console.log('');
 	console.log('  interval:');
 	console.log('       - represents timeframe of all requests in milliseconds (500..)');

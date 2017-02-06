@@ -1,9 +1,15 @@
 #!/bin/sh 
 cd "$(dirname "$0")"
 
-node ../benchmark/index %1 --validate
+output=$(node ../benchmark/index %1 --validate-method)
 ret_code=$?
 if [ $ret_code != 0 ]; then
+    printf "\n"
+    printf " usage:\n"
+    printf "       benchmark.sh method\n"
+    printf "\n"
+    printf $output
+    printf "\n"
     exit $ret_code
 fi
 
