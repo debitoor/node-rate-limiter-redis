@@ -13,30 +13,52 @@ const methodsMap = {
 	'NodeRateLimiter': getRateLimitMathod_NodeRateLimiter
 };
 
-if (process.argv.length < 3 || !methodsMap[process.argv[2]]) {
+
+let isValidateArgs = false;
+
+let args = process.argv.reduce((memo, v) => {
+	switch (v) {
+	case '--validate':
+	case '-v':
+		isValidateArgs = true;
+		break;
+	default:
+		memo.push(v);
+		break;
+	}
+
+	return memo;
+}, []);
+
+
+if (args.length < 3 || !methodsMap[args[2]]) {
 	printUsage();
 	process.exit(1);
 }
 
-let getRateLimitMathod = methodsMap[process.argv[2]];
+let getRateLimitMathod = methodsMap[args[2]];
 let requestsTimeframe = 20000;
 let requestsAmount = 50000;
 
-if (process.argv.length >= 4) {
-	requestsTimeframe = parseInt(process.argv[3]);
+if (args.length >= 4) {
+	requestsTimeframe = parseInt(args[3]);
 
 	if (Number.isNaN(requestsTimeframe) || requestsTimeframe < 500) {
 		printUsage();
 		process.exit(1);
 	}
 }
-if (process.argv.length >= 5) {
-	requestsAmount = parseInt(process.argv[4]);
+if (args.length >= 5) {
+	requestsAmount = parseInt(args[4]);
 
 	if (Number.isNaN(requestsAmount) || requestsAmount < 2) {
 		printUsage();
 		process.exit(1);
 	}
+}
+
+if (isValidateArgs) {
+	process.exit(0);
 }
 
 
