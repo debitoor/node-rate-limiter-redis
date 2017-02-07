@@ -6,6 +6,12 @@ Redis adaptor for [node-rate-limiter](https://github.com/mujichOk/node-rate-limi
 
 Redis 2.6.0+ ([lua scripting](https://redis.io/commands/evalsha), [pexpire](https://redis.io/commands/pexpire), [pttl](https://redis.io/commands/pttl) support)
 
+# Install
+
+```
+$ npm install node-rate-limiter-redis
+```
+
 # Usage
 ```js
     const NodeRateLimiter = require('node-rate-limiter');
