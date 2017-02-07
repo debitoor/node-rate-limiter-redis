@@ -20,7 +20,7 @@ P.S. please, read [node-rate-limiter](https://github.com/mujichOk/node-rate-limi
 
 # Benchmark
 
-You can run benchmark performance and compare results with [node-ratelimiter](https://github.com/tj/node-ratelimiter)
+You can benchmark performance and compare results with [node-ratelimiter](https://github.com/tj/node-ratelimiter)
 
 #### Linux/MacOS
 ```
