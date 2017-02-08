@@ -29,10 +29,10 @@ node ../benchmark/index $1 2000 2000 &
 node ../benchmark/index $1 2000 2000 &
 wait
 
-printf "high load (20k requests in 2s)\n"
-node ../benchmark/index $1 2000 4000 &
-node ../benchmark/index $1 2000 4000 &
-node ../benchmark/index $1 2000 4000 &
-node ../benchmark/index $1 2000 4000 &
-node ../benchmark/index $1 2000 4000 &
+printf "high load (30k requests in 2s)\n"
+node ../benchmark/index $1 2000 6000 &
+node ../benchmark/index $1 2000 6000 &
+node ../benchmark/index $1 2000 6000 &
+node ../benchmark/index $1 2000 6000 &
+node ../benchmark/index $1 2000 6000 &
 wait
