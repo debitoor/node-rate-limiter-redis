@@ -49,12 +49,12 @@ goto loop2
 del *.benchmark-lock
 
 
-echo high load (20k requests in 2s)
-start /b cmd /c "node ../benchmark/index %1 2000 4000 && type nul > 1.benchmark-lock"
-start /b cmd /c "node ../benchmark/index %1 2000 4000 && type nul > 2.benchmark-lock"
-start /b cmd /c "node ../benchmark/index %1 2000 4000 && type nul > 3.benchmark-lock"
-start /b cmd /c "node ../benchmark/index %1 2000 4000 && type nul > 4.benchmark-lock"
-start /b cmd /c "node ../benchmark/index %1 2000 4000 && type nul > 5.benchmark-lock"
+echo high load (30k requests in 2s)
+start /b cmd /c "node ../benchmark/index %1 2000 6000 && type nul > 1.benchmark-lock"
+start /b cmd /c "node ../benchmark/index %1 2000 6000 && type nul > 2.benchmark-lock"
+start /b cmd /c "node ../benchmark/index %1 2000 6000 && type nul > 3.benchmark-lock"
+start /b cmd /c "node ../benchmark/index %1 2000 6000 && type nul > 4.benchmark-lock"
+start /b cmd /c "node ../benchmark/index %1 2000 6000 && type nul > 5.benchmark-lock"
 :loop3
 set cnt=0
 for %%A in (*.benchmark-lock) do set /a cnt+=1
