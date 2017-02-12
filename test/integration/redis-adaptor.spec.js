@@ -4,34 +4,34 @@ describe('RedisAdaptor', () => {
 	const id = 'client.1';
 
 	it('should be class instance', () =>
-        expect(() => RedisAdaptor()).to.throw(assert.AssertionError).to.have.property('message').contains('new RedisAdaptor(...)')
-    );
+		expect(() => RedisAdaptor()).to.throw(assert.AssertionError).to.have.property('message').contains('new RedisAdaptor(...)')
+	);
 
 	describe('reset(id, callback)', () => {
-		const adaptor = new RedisAdaptor({timeout: 10000});
+		const adaptor = new RedisAdaptor({ timeout: 10000 });
 
 		before((done) =>
-            adaptor.prepare(done)
-        );
+			adaptor.prepare(done)
+		);
 
 		it('should return no errors', () => {
 			adaptor.reset(id, (err) => {
-	            expect(err).to.not.exist;
+				expect(err).to.not.exist;
 			});
 		});
 	});
 
 	describe('get(id, opts, callback)', () => {
-		const adaptor = new RedisAdaptor({timeout: 10000});
+		const adaptor = new RedisAdaptor({timeout: 1000 });
 		const opts = { limit: 10, expire: 2000 };
 		let refresh = opts.expire;
 
 		before((done) =>
-            adaptor.prepare(done)
-        );
+			adaptor.prepare(done)
+		);
 		before((done) =>
-            adaptor.reset(id, done)
-        );
+			adaptor.reset(id, done)
+		);
 
 		[10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 0].forEach((v, i) => {
 			it('should return valid limit\'s info on call #' + (i + 1), (done) => {
@@ -61,6 +61,39 @@ describe('RedisAdaptor', () => {
 				});
 			}, opts.expire * 1.1);
 		});
+
+
+		describe('when execution time is out of timeframe', function () {
+			this.timeout(2500);
+
+			it('should call onTimeouted', (done) => {
+				const opts = { limit: 10, expire: 2000 };
+
+				const client = {
+					script: function () {
+						const callback = arguments[arguments.length - 1];
+						setTimeout(() => callback(null, '1234567890987654321'));
+					},
+					evalsha: function () {
+						const callback = arguments[arguments.length - 1];
+						setTimeout(() => callback(null, [0, 0, 0]), 2000);
+					}
+				};
+
+				const adaptor = new RedisAdaptor({
+					client: client, timeout: 1000, onTimeouted: (err, res, ticks) => {
+						expect(res).to.be.a('array');
+						expect(ticks).to.be.at.least(2000);
+						done();
+					}
+				});
+
+				adaptor.get(id, opts, (err, res) => {
+					expect(err).to.be.a('object').to.have.property('name', 'TimeoutError');
+				});
+			});
+		});
+
 	});
 
 });
