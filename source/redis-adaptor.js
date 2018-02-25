@@ -9,6 +9,7 @@ const script = fs.readFileSync(path.join(__dirname, 'script.lua'), 'utf-8');
 
 module.exports = RedisAdaptor;
 
+
 function RedisAdaptor(opts) {
 	assert(this instanceof RedisAdaptor, 'RedisAdaptor should be created with new keyword: new RedisAdaptor(...)');
 
@@ -115,9 +116,9 @@ function prepare(adaptorOpts, callback) {
 
 function registerTimeout(message, timeout, callback) {
 	return setTimeout(() => {
-		const error = new NodeRateLimiter.TimeoutError(message, { after: timeout });
+		const error = new NodeRateLimiter.TimeoutError(message, {after: timeout});
 		callback(error);
 	}, timeout);
 }
 
-function noop() { }
+function noop() {}
