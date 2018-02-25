@@ -6,7 +6,7 @@ const RateLimiter = require('ratelimiter');
 const NodeRateLimiter = require('node-rate-limiter');
 const RedisAdaptor = require('../source/redis-adaptor');
 
-const nodeRateLimiter = new NodeRateLimiter(new RedisAdaptor({ client: client, timeout: 20000 }));
+const nodeRateLimiter = new NodeRateLimiter(new RedisAdaptor({client: client, timeout: 20000}));
 
 const methodsMap = {
 	'RateLimiter': getRateLimitMathod_RateLimiter,
@@ -18,13 +18,13 @@ let isValidateMethod = false;
 
 let args = process.argv.reduce((memo, v) => {
 	switch (v) {
-	case '--validate-method':
-	case '-vm':
-		isValidateMethod = true;
-		break;
-	default:
-		memo.push(v);
-		break;
+		case '--validate-method':
+		case '-vm':
+			isValidateMethod = true;
+			break;
+		default:
+			memo.push(v);
+			break;
 	}
 
 	return memo;
@@ -78,7 +78,7 @@ client.on('ready', function () {
 
 
 function getRateLimitMathod_RateLimiter(clientId, callback) {
-	new RateLimiter({ id: clientId, db: client, max: 5000, duration: 10000 }).get(callback);
+	new RateLimiter({id: clientId, db: client, max: 5000, duration: 10000}).get(callback);
 }
 
 function getRateLimitMathod_NodeRateLimiter(clientId, callback) {
