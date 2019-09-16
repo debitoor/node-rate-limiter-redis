@@ -102,9 +102,13 @@ function prepare(adaptorOpts, callback) {
 	}
 
 	adaptorOpts.client.script('load', script, onScriptLoaded);
+	let timerId = registerTimeout('prepare', adaptorOpts.timeout, onScriptLoaded);
 
 
 	function onScriptLoaded(err, sha) {
+		if (timerId) {
+			timerId = clearTimeout(timerId);
+		}
 		if (err) {
 			return callback(err);
 		}

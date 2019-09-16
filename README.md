@@ -1,6 +1,6 @@
-# node-rate-limiter-redis [![Build Status](https://travis-ci.org/mujichOk/node-rate-limiter-redis.svg?branch=master)](https://travis-ci.org/mujichOk/node-rate-limiter-redis)
+# node-rate-limiter-redis [![Build Status](https://travis-ci.org/debitoor/node-rate-limiter-redis.svg?branch=master)](https://travis-ci.org/debitoor/node-rate-limiter-redis)
 
-Redis adaptor for [node-rate-limiter](https://github.com/mujichOk/node-rate-limiter)
+Redis adaptor for [node-rate-limiter](https://github.com/debitoor/node-rate-limiter)
 
 # Requirements
 
@@ -22,7 +22,7 @@ $ npm install node-rate-limiter-redis
     });
     const nodeRateLimiter = new NodeRateLimiter(adaptor);
 ```
-P.S. please, read [node-rate-limiter](https://github.com/mujichOk/node-rate-limiter) README file for complete usage guide 
+P.S. please, read [node-rate-limiter](https://github.com/debitoor/node-rate-limiter) README file for complete usage guide
 
 # Benchmark
 
@@ -39,4 +39,4 @@ You can benchmark performance and compare results with [node-ratelimiter](https:
 
 # License
 
-[MIT](https://raw.githubusercontent.com/mujichOk/node-rate-limiter-redis/master/LICENSE)
+[MIT](https://raw.githubusercontent.com/debitoor/node-rate-limiter-redis/master/LICENSE)
