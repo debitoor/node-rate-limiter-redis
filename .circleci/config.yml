@@ -1,0 +1,76 @@
+version: 2.1
+
+jobs:
+  test:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:10.13.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+      - run:
+          name: Create NPMRC
+          command: echo $NPMRC > ~/repo/.npmrc
+      - run:
+          name: update npm
+          command: sudo npm i npm@6.8.0 -g
+      - run:
+          name: NPM Install
+          command: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - run:
+          name: NPM Test
+          command: npm test
+
+  nightly_test:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:10.13.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+      - run:
+          name: Create NPMRC
+          command: echo $NPMRC > ~/repo/.npmrc
+      - run:
+          name: update npm
+          command: sudo npm i npm@6.8.0 -g
+      - run:
+          name: NPM Install
+          command: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - run:
+          name: NPM Test
+          command: npm test
+
+workflows:
+   version: 2.1
+   test:
+     jobs:
+       - test:
+            context: ECR
+            filters:
+              branches:
+                ignore: master
+
+   nightly:
+      triggers:
+        - schedule:
+            cron: "0 1 * * *"
+            filters:
+              branches:
+                only: master
+      jobs:
+        - nightly_test:
+            context: ECR
+
